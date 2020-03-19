@@ -4,10 +4,24 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var config = require("config");
+var mongoose = require("mongoose");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testBackRouter = require("./routes/testBack");
 var app = express();
+
+//use config module to get the privatekey, if no private key set, end the application
+if (!config.get("myprivatekey")) {
+  console.error("FATAL ERROR: myprivatekey is not defined.");
+  process.exit(1);
+}
+
+//connect to mongodb
+mongoose
+  .connect("mongodb://localhost/nodejsauth", { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Connected to MongoDB..."))
+  .catch(err => console.error("Could not connect to MongoDB..."));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,5 +52,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+const port = process.env.PORT || 9000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 module.exports = app;
