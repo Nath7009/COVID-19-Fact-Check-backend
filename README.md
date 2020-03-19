@@ -5,6 +5,6 @@ Lancer l'application
 Dans le dossier du projet faire :
 
 npm install
-npm start
+npm app.js
 
-Le projet se lance à l'URL http://localhost:9000/testBack
+Le projet se lance à l'URL http://localhost:3000/COVID-19-Fact-Check
